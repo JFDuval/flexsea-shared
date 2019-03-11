@@ -1,0 +1,6 @@
+set(SRCS
+	${SRCS}
+	${CMAKE_CURRENT_SOURCE_DIR}/unity/unity.c
+	PARENT_SCOPE
+)
+
