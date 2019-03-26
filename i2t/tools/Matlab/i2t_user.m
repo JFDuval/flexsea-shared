@@ -26,14 +26,14 @@ disp('============================================')
 
 I2T_SHIFT = 7             % Closest bitshift available
 SCALE = 128;              % (Octave only, avoids bitwise operations)
-NON_LIN_TRESH = 22500;    % mA
+NON_LIN_TRESH = 25000;    % mA
 
 % Maximum average current you want to support:
-maxAvgCurrent = 2500;     %mA
+maxAvgCurrent = 5000;     %mA
 I2T_LEAK = (maxAvgCurrent / SCALE)^2
 
 % Maximum peak current you want to support, and duration:
-currentLimit = 15000;     %mA
+currentLimit = 17500;     %mA
 currentLimitTime = 1;     %s
 I2T_LIMIT = (currentLimitTime / dt) * ((currentLimit/SCALE)^2 - I2T_LEAK)
 
@@ -63,7 +63,7 @@ legend('Original', 'Non-linear')
 
 disp('')
 disp('Time at given current (mA):')
-CURR = 25000
+CURR = 30000
 CURR2 = (max(0,(CURR-NON_LIN_TRESH)));
 tmp = (CURR./SCALE).^2;
 tmpNL = ((CURR+10*CURR2)./SCALE).^2;
