@@ -6,9 +6,9 @@
 //User inputs:
 uint8_t userShift = 7;
 //Maximum average current you want to support:
-int32_t userMaxAvgCurrent = 2500;			//mA
+int32_t userMaxAvgCurrent = 5000;			//mA
 //Maximum peak current you want to support, and duration:
-int32_t userCurrentLimit = 15000;			//mA
+int32_t userCurrentLimit = 17500;			//mA
 float userCurrentLimitTime = 1;				//s
 //Non-linear threshold
 int32_t userNlTresh = 22500;

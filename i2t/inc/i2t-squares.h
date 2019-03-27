@@ -1,5 +1,7 @@
 #ifndef INC_I2T_SQUARES_H
 #define INC_I2T_SQUARES_H
+	
+#include <stdint.h>
 
 //Returns the square of a value
 #define SQUARE_MAX	650

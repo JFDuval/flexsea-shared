@@ -26,7 +26,7 @@ disp('============================================')
 
 I2T_SHIFT = 7             % Closest bitshift available
 SCALE = 128;              % (Octave only, avoids bitwise operations)
-NON_LIN_TRESH = 25000;    % mA
+NON_LIN_TRESH = 22500;    % mA
 
 % Maximum average current you want to support:
 maxAvgCurrent = 5000;     %mA
@@ -63,7 +63,7 @@ legend('Original', 'Non-linear')
 
 disp('')
 disp('Time at given current (mA):')
-CURR = 30000
+CURR = 25000
 CURR2 = (max(0,(CURR-NON_LIN_TRESH)));
 tmp = (CURR./SCALE).^2;
 tmpNL = ((CURR+10*CURR2)./SCALE).^2;
