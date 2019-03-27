@@ -26,15 +26,15 @@ disp('============================================')
 
 I2T_SHIFT = 7             % Closest bitshift available
 SCALE = 128;              % (Octave only, avoids bitwise operations)
-NON_LIN_TRESH = 22500;    % mA
+NON_LIN_TRESH = 55000;    % mA
 
 % Maximum average current you want to support:
-maxAvgCurrent = 5000;     %mA
+maxAvgCurrent = 15000;     %mA
 I2T_LEAK = (maxAvgCurrent / SCALE)^2
 
 % Maximum peak current you want to support, and duration:
-currentLimit = 17500;     %mA
-currentLimitTime = 1;     %s
+currentLimit = 50000;     %mA
+currentLimitTime = 0.33;     %s
 I2T_LIMIT = (currentLimitTime / dt) * ((currentLimit/SCALE)^2 - I2T_LEAK)
 
 %At what fraction of the max to you want a warning? (0-1)

@@ -50,7 +50,7 @@ uint8_t i2tPct = 0;
 struct i2t_s i2t = {.shift = I2C_SCALE_DOWN_SHIFT, .leak = I2T_LEAK, \
 					.limit = I2T_LIMIT, .warning = I2T_WARNING, \
 					.nonLinThreshold = I2T_NON_LIN_TRESHOLD, \
-					.useNL = I2T_ENABLE_NON_LIN};
+					.useNL = I2T_DISABLE_NON_LIN};
 
 //****************************************************************************
 // Private Function Prototype(s)
