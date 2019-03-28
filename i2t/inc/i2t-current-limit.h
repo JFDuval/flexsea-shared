@@ -52,11 +52,13 @@ struct i2t_s
 	uint8_t config;
 };
 
+#if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 //****************************************************************************
 // Public Function Prototype(s):
 //****************************************************************************
 
-void i2t_sample(int32 lastCurrentRead);
+void i2t_sample(int32_t lastCurrentRead);
 int i2t_compute(void);
 void updateI2tSettings(struct i2t_s i2t);
 uint8_t i2t_get_percentage(void);
@@ -131,3 +133,5 @@ uint8_t i2t_get_flag(void);
 #define I2T_DISABLE_NON_LIN		0x00
 
 #endif 	//INC_I2TCURRENT_H
+
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
