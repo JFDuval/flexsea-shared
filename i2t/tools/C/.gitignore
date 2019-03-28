@@ -1,0 +1,12 @@
+*~
+*.bak
+*.o
+*.a
+
+/Release/
+/Debug/
+*/language.settings.xml
+/doc/html/
+*.orig
+*.launch
+*.settings/
