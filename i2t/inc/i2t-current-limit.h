@@ -85,8 +85,8 @@ uint8_t i2t_get_flag(void);
 #ifndef BOARD_SUBTYPE_POCKET
 //#define I2T_LEAK				382		//2.5A
 //#define I2T_LEAK				1526	//5A
-//#define I2T_LEAK				6104	//10A
-#define I2T_LEAK				13732	//15A
+#define I2T_LEAK				6104	//10A
+//#define I2T_LEAK				13732	//15A
 #else
 #define I2T_LEAK				4944	//2.25A
 #endif
@@ -100,14 +100,15 @@ uint8_t i2t_get_flag(void);
 //#define I2T_LIMIT				100135	//15A 750ms (2.5A cont.)
 //#define I2T_LIMIT				76294	//15A 1s (10A cont.)
 //#define I2T_LIMIT				171661	//17.5A 1s (5A cont.)
-#define I2T_LIMIT				458221	//50A 0.33s (15A cont.)
+//#define I2T_LIMIT				458221	//50A 0.33s (15A cont.)
+#define I2T_LIMIT				226593	//35A 0.33s (10A cont.)
 #else
 #define I2T_LIMIT				302124	//6A 1s
 #endif
 #define I2T_WARNING				(0.8*I2T_LIMIT)
 //#define I2T_NON_LIN_TRESHOLD	125		//16000mA/(2^7) = 125
 //#define I2T_NON_LIN_TRESHOLD	195		//25000mA/(2^7) = 195
-#define I2T_NON_LIN_TRESHOLD	255		//55000mA/(2^7) = 429 (invalid, > 255)
+#define I2T_NON_LIN_TRESHOLD	255		//40000mA/(2^7) = 312 (invalid, > 255)
 
 //How long will it last at 11A?
 //time = (Limit * dt) / ( (CURR>>I2C_SCALE_DOWN_SHIFT)^2 - I2T_LEAK )
