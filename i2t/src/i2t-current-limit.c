@@ -35,6 +35,9 @@
 #include "main.h"
 #include <stdlib.h>
 #include "i2t-current-limit.h"
+
+#if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 #include "i2t-squares.h"
 
 //****************************************************************************
@@ -190,3 +193,5 @@ static void resetCurrentSampleIndex(void)
 {
 	currentSampleIndex = 0;
 }
+
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
