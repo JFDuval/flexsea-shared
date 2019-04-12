@@ -1,6 +1,5 @@
 file(GLOB_RECURSE FLEX_SHARED_SRCS	
 	${CMAKE_CURRENT_SOURCE_DIR}/i2t/src/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/unity/*.c
 	${CMAKE_CURRENT_SOURCE_DIR}/logger/src/*.c
 	${CMAKE_CURRENT_SOURCE_DIR}/utilities/src/*.c
 )

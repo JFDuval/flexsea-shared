@@ -32,12 +32,11 @@
 // Include(s)
 //****************************************************************************
 
-#include "main.h"
 #include <stdlib.h>
 #include "i2t-current-limit.h"
 
 #if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
-
+#include "main.h"
 #include "i2t-squares.h"
 
 //****************************************************************************
