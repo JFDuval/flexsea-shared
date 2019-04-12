@@ -14,8 +14,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdarg.h>
-#define LOG_VERSION "0.1.0"
-#define DEBUG_LOG "debug_log"
+#define DEBUG_LOG "Debug-Log"
 #include "../../utilities/inc/folderutilities.h"
 #define FILELOG_MAX_LEVEL 7
 typedef void (*log_LockFn)(void *udata, int lock);
