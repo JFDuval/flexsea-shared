@@ -20,6 +20,11 @@
  * IN THE SOFTWARE.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -38,7 +43,7 @@ typedef struct {
 
 static s_logger logger = {
 .is_embedded = 0, // add flag based logic set up serial
-.MIN_LEVEL = lerror,
+.MIN_LEVEL = lwarning, // this should be relatively rare
 .lock = 0,
 .fp = NULL
 };
@@ -135,3 +140,7 @@ if (level > logger.MIN_LEVEL)
   /* Release lock */
   unlock();
 }
+
+#ifdef __cplusplus
+}
+#endif

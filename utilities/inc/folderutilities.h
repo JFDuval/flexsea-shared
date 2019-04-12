@@ -1,6 +1,10 @@
 #ifndef FOLDER_UTILITIES_H
 #define FOLDER_UTILITIES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <time.h>
 #include <string.h>
 #ifdef _WIN32
@@ -21,6 +25,8 @@ inline int isIllegalFileChar(char c)
 }
 void appendExtension(const char * file, const char * extension, char * fileExt);
 void appendPath(const char* directory1,const char* directory2, char * appendedDir);
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif //FOLDER_UTILITIES_H

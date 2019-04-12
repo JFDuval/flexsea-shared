@@ -1,3 +1,8 @@
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "folderutilities.h"
 
 // Generic function to create string out of current data and time
@@ -82,3 +87,7 @@ int createFolder(const char * path)
 
    return success;
 }
+
+#ifdef __cplusplus
+}
+#endif
