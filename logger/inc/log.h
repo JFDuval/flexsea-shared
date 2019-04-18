@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#ifdef BOARD_TYPE_FLEXSEA_PLAN
+
 #include <stdio.h>
 #include <stdarg.h>
 #define DEBUG_LOG "Debug-Log"
@@ -32,6 +34,13 @@ void log_set_level(TLogLevel level);
 void log_set_embedded(int enable);
 
 void log_log(TLogLevel level, const char *file, int line, const char *fmt, ...);
+
+#else
+
+// TODO: add print statement debugging with a debug uart
+#define LOG(level,...) do{}while(0);
+
+#endif
 
 #ifdef __cplusplus
 }
