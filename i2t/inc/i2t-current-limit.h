@@ -87,8 +87,8 @@ uint8_t i2t_get_flag(void);
 #ifndef BOARD_SUBTYPE_POCKET
 //#define I2T_LEAK				382		//2.5A
 //#define I2T_LEAK				1526	//5A
-#define I2T_LEAK				6104	//10A
-//#define I2T_LEAK				13732	//15A
+//#define I2T_LEAK				6104	//10A
+#define I2T_LEAK				13732	//15A
 #else
 #define I2T_LEAK				4944	//2.25A
 #endif
@@ -102,8 +102,8 @@ uint8_t i2t_get_flag(void);
 //#define I2T_LIMIT				100135	//15A 750ms (2.5A cont.)
 //#define I2T_LIMIT				76294	//15A 1s (10A cont.)
 //#define I2T_LIMIT				171661	//17.5A 1s (5A cont.)
-//#define I2T_LIMIT				458221	//50A 0.33s (15A cont.)
-#define I2T_LIMIT				226593	//35A 0.33s (10A cont.)
+#define I2T_LIMIT				458221	//50A 0.33s (15A cont.)
+//#define I2T_LIMIT				226593	//35A 0.33s (10A cont.)
 #else
 #define I2T_LIMIT				302124	//6A 1s
 #endif
