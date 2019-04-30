@@ -12,13 +12,16 @@
 extern "C" {
 #endif
 
+typedef enum logLevels {lerror, lwarning, linfo, ldebug1, ldebug2, ldebug3, ldebug4} TLogLevel;
+
+#ifdef BOARD_TYPE_FLEXSEA_PLAN
+
 #include <stdio.h>
 #include <stdarg.h>
 #define DEBUG_LOG "Debug-Log"
 #include "../../utilities/inc/folderutilities.h"
 #define FILELOG_MAX_LEVEL 7
 typedef void (*log_LockFn)(void *udata, int lock);
-typedef enum logLevels {lerror, lwarning, linfo, ldebug1, ldebug2, ldebug3, ldebug4} TLogLevel;
 static const char *level_names[FILELOG_MAX_LEVEL] = {"ERROR", "WARNING", "INFO", "DEBUG1", "DEBUG2", "DEBUG3","DEBUG4"};
 
 #define LOG(level,...) \
@@ -32,6 +35,13 @@ void log_set_level(TLogLevel level);
 void log_set_embedded(int enable);
 
 void log_log(TLogLevel level, const char *file, int line, const char *fmt, ...);
+
+#else
+
+// TODO: add print statement debugging with a debug uart
+#define LOG(level,...) do{}while(0);
+
+#endif
 
 #ifdef __cplusplus
 }
