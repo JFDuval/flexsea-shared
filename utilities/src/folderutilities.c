@@ -4,7 +4,7 @@ extern "C" {
 #endif
 
 #include "folderutilities.h"
-
+#include <errno.h>
 // Generic function to create string out of current data and time
 void NowTime(char *dt)
 {
