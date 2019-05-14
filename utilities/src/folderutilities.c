@@ -32,6 +32,10 @@ void str_replace(char toReplace,char replacement,char * dest, int maxLen)
 	}
 }
 
+inline int isIllegalFileChar(char c)
+{
+    return c == '\n' || c == '\t';
+}
 
 // Assumes strings are null terminated
 inline void appendPath(const char* directory1,const char* directory2, char * appendedDir)
