@@ -24,6 +24,7 @@
 #define MNRE_PULSE_LEN				15
 #define MNRE_PULSE_WIGGLE			2
 
+enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
 
 /*
 #define EX_I2C_ADDR					0x66	//7-bits: 0x33
