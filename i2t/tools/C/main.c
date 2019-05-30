@@ -44,6 +44,8 @@ int32_t calculateI2tConstants(int32_t maxAvgCurrent, int32_t currentLimit, float
 void printI2tConstants(void);
 void test(int32_t current);
 
+#ifndef BOARD_TYPE_FLEXSEA_PLAN
+
 int main(void)
 {
 	printf( "I2t Configuration\n");
@@ -64,6 +66,8 @@ int main(void)
 
 	test(25000);
 }
+
+#endif
 
 int32_t precheckI2tUserRequests(int32_t* maxAvgCurrent, int32_t* currentLimit, float* currentLimitTime, int32_t* nlTresh, uint8_t* shift)
 {
