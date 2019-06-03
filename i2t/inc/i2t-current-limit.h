@@ -61,6 +61,8 @@ enum i2tPresets_s{I2T_RE_PRESET_A = 0, I2T_RE_PRESET_B};
 // Public Function Prototype(s):
 //****************************************************************************
 
+uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b);
+
 #if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 void initI2t(void);	
@@ -69,7 +71,6 @@ int i2t_compute(void);
 void updateI2tSettings(struct i2t_s i2t);
 uint8_t i2t_get_percentage(void);
 uint8_t i2t_get_flag(void);
-uint8_t presetI2t(enum i2tPresets_s b);
 
 //****************************************************************************
 // Definition(s):

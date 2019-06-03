@@ -70,11 +70,13 @@ void initI2t(void)
 {
 	//Default preset:
 	#ifdef BOARD_TYPE_FLEXSEA_REGULATE
-	presetI2t(I2T_RE_PRESET_A);
+	presetI2t(&i2t, I2T_RE_PRESET_A);
 	#endif
 
-	//Read from EEPROM:
+	//Read from non-volatile/EEPROM:
+	#ifdef BOARD_TYPE_FLEXSEA_REGULATE
 	readI2tFromEEPROM();
+	#endif
 }
 
 //Call this function every ms, and give it the latest current reading
@@ -177,7 +179,7 @@ void updateI2tSettings(struct i2t_s newI2t)
 		(newI2t.leak >= newI2t.limit))
 	{
 		//Crazy values, we load presets instead:
-		presetI2t(I2T_RE_PRESET_A);
+		presetI2t(&i2t, I2T_RE_PRESET_A);
 		return;
 	}
 	
@@ -191,8 +193,16 @@ void updateI2tSettings(struct i2t_s newI2t)
 	i2t = newI2t;
 }
 
+//Returns the %. 0% means no integral, 100% = we are at the limit.
+uint8_t i2t_get_percentage(void){return i2tPct;}
+
+//Return the current limit flag
+uint8_t i2t_get_flag(void){return currentLimitFlag;}
+
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 //Default limits:
-uint8_t presetI2t(enum i2tPresets_s b)
+uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
 {
 	struct i2t_s s;
 	if(b == I2T_RE_PRESET_A)
@@ -201,12 +211,13 @@ uint8_t presetI2t(enum i2tPresets_s b)
 		s.shift = 7;
 		s.leak = 3433;
 		s.limit = 15449;
+		s.warning = (4*s.limit) / 5;	//80%
 		s.nonLinThreshold = 137;
 		s.useNL = I2T_ENABLE_NON_LIN;
 		s.config = 128;
 		
 		//Copy
-		i2t = s;
+		(*i) = s;
 		
 		return 1;
 	}
@@ -222,16 +233,11 @@ uint8_t presetI2t(enum i2tPresets_s b)
 	return 0;
 }
 
-//Returns the %. 0% means no integral, 100% = we are at the limit.
-uint8_t i2t_get_percentage(void){return i2tPct;}
-
-//Return the current limit flag
-uint8_t i2t_get_flag(void){return currentLimitFlag;}
-
-
 //****************************************************************************
 // Private Function(s)
 //****************************************************************************
+
+#if (defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 static uint8_t getCurrentSampleIndex(void)
 {
