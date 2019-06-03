@@ -39,6 +39,10 @@
 #include "main.h"
 #include "i2t-squares.h"
 
+#ifdef BOARD_TYPE_FLEXSEA_REGULATE
+#include "eeprom_user.h"
+#endif	//BOARD_TYPE_FLEXSEA_REGULATE
+	
 //****************************************************************************
 // Variable(s)
 //****************************************************************************
@@ -48,11 +52,8 @@ uint8_t currentSampleIndex = 0;
 uint8_t currentLimitFlag = 0;
 uint8_t i2tPct = 0;
 
-//Structure with default values:
-struct i2t_s i2t = {.shift = I2C_SCALE_DOWN_SHIFT, .leak = I2T_LEAK, \
-					.limit = I2T_LIMIT, .warning = I2T_WARNING, \
-					.nonLinThreshold = I2T_NON_LIN_TRESHOLD, \
-					.useNL = I2T_DISABLE_NON_LIN};
+//Structure used to configure the protections:
+struct i2t_s i2t;
 
 //****************************************************************************
 // Private Function Prototype(s)
@@ -65,9 +66,20 @@ static void resetCurrentSampleIndex(void);
 // Public Function(s)
 //****************************************************************************
 
+void initI2t(void)
+{
+	//Default preset:
+	#ifdef BOARD_TYPE_FLEXSEA_REGULATE
+	presetI2t(I2T_RE_PRESET_A);
+	#endif
+
+	//Read from EEPROM:
+	readI2tFromEEPROM();
+}
+
 //Call this function every ms, and give it the latest current reading
 //Use a signed value, without offset
-void i2t_sample(int32 lastCurrentRead)
+void i2t_sample(int32_t lastCurrentRead)
 {
 	static int tb_div = 1;
 	uint8_t index = 0;
@@ -160,7 +172,14 @@ int i2t_compute(void)
 
 void updateI2tSettings(struct i2t_s newI2t)
 {
-	//ToDo add safety checks!
+	//Some rough safety checks to detect crazy values
+	if((newI2t.shift < 4 || newI2t.shift > 8) || \
+		(newI2t.leak >= newI2t.limit))
+	{
+		//Crazy values, we load presets instead:
+		presetI2t(I2T_RE_PRESET_A);
+		return;
+	}
 	
 	//Set values not shared:
 	newI2t.warning = (4*newI2t.limit) / 5;	//80%
@@ -172,11 +191,43 @@ void updateI2tSettings(struct i2t_s newI2t)
 	i2t = newI2t;
 }
 
+//Default limits:
+uint8_t presetI2t(enum i2tPresets_s b)
+{
+	struct i2t_s s;
+	if(b == I2T_RE_PRESET_A)
+	{
+		//Regulate: 7.5A cont., 15A for 150ms, non-linearity at 17.5A			
+		s.shift = 7;
+		s.leak = 3433;
+		s.limit = 15449;
+		s.nonLinThreshold = 137;
+		s.useNL = I2T_ENABLE_NON_LIN;
+		s.config = 128;
+		
+		//Copy
+		i2t = s;
+		
+		return 1;
+	}
+	else if(b == 1)
+	{
+		//ToDo Execute, or other pre-sets.
+		
+		//Not programmed, fail:
+		return 0;
+	}
+	
+	//Failed
+	return 0;
+}
+
 //Returns the %. 0% means no integral, 100% = we are at the limit.
 uint8_t i2t_get_percentage(void){return i2tPct;}
 
 //Return the current limit flag
 uint8_t i2t_get_flag(void){return currentLimitFlag;}
+
 
 //****************************************************************************
 // Private Function(s)

@@ -26,15 +26,15 @@ disp('============================================')
 
 I2T_SHIFT = 7             % Closest bitshift available
 SCALE = 128;              % (Octave only, avoids bitwise operations)
-NON_LIN_TRESH = 25000;    % mA
+NON_LIN_TRESH = 17500;    % mA
 
 % Maximum average current you want to support:
-maxAvgCurrent = 12500;     %mA
+maxAvgCurrent = 7500;     %mA
 I2T_LEAK = (maxAvgCurrent / SCALE)^2
 
 % Maximum peak current you want to support, and duration:
-currentLimit = 20000;     %mA
-currentLimitTime = 0.5;     %s
+currentLimit = 15000;     %mA
+currentLimitTime = 0.15;     %s
 I2T_LIMIT = (currentLimitTime / dt) * ((currentLimit/SCALE)^2 - I2T_LEAK)
 
 %At what fraction of the max to you want a warning? (0-1)
@@ -57,6 +57,7 @@ title('Time before reaching the I2t limit')
 xlabel('Current (mA)')
 ylabel('Time (s)')
 ylim([0,Y_TIME_MAX])
+xlim([0.9*maxAvgCurrent,1.25*max(currentLimit,NON_LIN_TRESH)])
 hold on
 plot(CURR, timeNL, 'r')
 legend('Original', 'Non-linear')

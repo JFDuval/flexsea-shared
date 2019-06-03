@@ -34,7 +34,16 @@
 //****************************************************************************
 // Include(s)
 //****************************************************************************
+	
 #include <stdint.h>
+#if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+#include "main.h"
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+	
+//****************************************************************************
+// Structure(s):
+//****************************************************************************
+
 struct i2t_s
 {
 	uint8_t shift;
@@ -46,81 +55,25 @@ struct i2t_s
 	uint8_t config;
 };
 
-#if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
-
-#include "main.h"
-
-//****************************************************************************
-// Structure(s):
-//****************************************************************************
-
+enum i2tPresets_s{I2T_RE_PRESET_A = 0, I2T_RE_PRESET_B};
 
 //****************************************************************************
 // Public Function Prototype(s):
 //****************************************************************************
 
+#if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
+void initI2t(void);	
 void i2t_sample(int32_t lastCurrentRead);
 int i2t_compute(void);
 void updateI2tSettings(struct i2t_s i2t);
 uint8_t i2t_get_percentage(void);
 uint8_t i2t_get_flag(void);
+uint8_t presetI2t(enum i2tPresets_s b);
 
 //****************************************************************************
 // Definition(s):
 //****************************************************************************
-
-//Important: the settings below are the DEFAULT. Mn can now update them.
-
-//The algorithm uses 8-bit values: we need to scale down the maximum current
-//accordingly. It uses real units (mA). Ex.: ±30000mA sensor =>
-//30000/256 = 117 => shift 7 (div by 128). 30A will give us 234
-#ifndef BOARD_SUBTYPE_POCKET
-#define I2C_SCALE_DOWN_SHIFT	7
-#else
-#define I2C_SCALE_DOWN_SHIFT	5
-#endif
-//We use a leaky integrator. The leak should be set to the maximum sustained
-//current required by your application. It's applied on the squared value (so 
-//max current = 65536). Pick a fraction of that number. Ex.: if the max current
-//that your sensor can read is 30A and you wan to support 10A continuous, 
-//use (10000 >> I2C_SCALE_DOWN_SHIFT)^2 = 6104. With 10A flowing, your 
-//integrator will stay at 0. Anything above it will increase its count.
-#ifndef BOARD_SUBTYPE_POCKET
-//#define I2T_LEAK				382		//2.5A
-//#define I2T_LEAK				1526	//5A
-//#define I2T_LEAK				6104	//10A
-#define I2T_LEAK				13732	//15A
-#else
-#define I2T_LEAK				4944	//2.25A
-#endif
-//What current limit do you want?
-//Limit = (TIME_AT_LIMIT_CURR / dt) * ( (CURR_LIMIT>>I2C_SCALE_DOWN_SHIFT)^2 - I2T_LEAK )
-//Ex.: 15A for 10s 
-//	Limit = (10s / 100ms) * ( (15000mA/128)^2 - 6104)
-//	Limit = 100 * ( 13733 - 6104) = 762891
-#ifndef BOARD_SUBTYPE_POCKET
-//#define I2T_LIMIT				71411	//8A 3s
-//#define I2T_LIMIT				100135	//15A 750ms (2.5A cont.)
-//#define I2T_LIMIT				76294	//15A 1s (10A cont.)
-//#define I2T_LIMIT				171661	//17.5A 1s (5A cont.)
-#define I2T_LIMIT				458221	//50A 0.33s (15A cont.)
-//#define I2T_LIMIT				226593	//35A 0.33s (10A cont.)
-#else
-#define I2T_LIMIT				302124	//6A 1s
-#endif
-#define I2T_WARNING				(0.8*I2T_LIMIT)
-//#define I2T_NON_LIN_TRESHOLD	125		//16000mA/(2^7) = 125
-//#define I2T_NON_LIN_TRESHOLD	195		//25000mA/(2^7) = 195
-#define I2T_NON_LIN_TRESHOLD	255		//40000mA/(2^7) = 312 (invalid, > 255)
-
-//How long will it last at 11A?
-//time = (Limit * dt) / ( (CURR>>I2C_SCALE_DOWN_SHIFT)^2 - I2T_LEAK )
-//time = (762891 * 0.1) / ( (11000mA>>7)^2 - 6104 ) = 76289 / (7385 - 6104)
-//time = 1 minute
-
-//Please note that there is an Octave/Matlab script in /ref/. It makes this 
-//calculation faster, and it plots limit vs time.
-//http://dephy.com/wiki/flexsea/doku.php?id=i2t
 
 //ADC readings:
 #define I2T_SAMPLES				8
@@ -134,6 +87,6 @@ uint8_t i2t_get_flag(void);
 #define I2T_ENABLE_NON_LIN		0x80
 #define I2T_DISABLE_NON_LIN		0x00
 
-#endif 	//INC_I2TCURRENT_H
-
 #endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
+#endif 	//INC_I2TCURRENT_H
