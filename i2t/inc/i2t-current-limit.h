@@ -46,13 +46,16 @@
 
 struct i2t_s
 {
-	uint8_t shift;
+	//Variables exchanged during calibration:	
 	uint16_t leak;
 	uint32_t limit;
-	uint32_t warning;
-	uint8_t nonLinThreshold;	//ToDo Change to uint16
+	uint16_t nonLinThreshold;	
+	uint8_t config;	//Contains shift and UseNL
+	
+	//Generated from above:
+	uint8_t shift;	
 	uint8_t useNL;
-	uint8_t config;
+	uint32_t warning;	
 };
 
 enum i2tPresets_s{I2T_RE_PRESET_A = 0, I2T_RE_PRESET_B};
@@ -62,13 +65,14 @@ enum i2tPresets_s{I2T_RE_PRESET_A = 0, I2T_RE_PRESET_B};
 //****************************************************************************
 
 uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b);
+uint8_t diffI2tStructs(struct i2t_s a, struct i2t_s b);
 
 #if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 void initI2t(void);	
 void i2t_sample(int32_t lastCurrentRead);
 int i2t_compute(void);
-void updateI2tSettings(struct i2t_s i2t);
+void updateI2tSettings(struct i2t_s i2t, uint8_t fromEEPROM);
 uint8_t i2t_get_percentage(void);
 uint8_t i2t_get_flag(void);
 
@@ -85,8 +89,10 @@ uint8_t i2t_get_flag(void);
 #define RET_I2T_WARNING			1
 #define RET_I2T_LIMIT			2
 
-#define I2T_ENABLE_NON_LIN		0x80
-#define I2T_DISABLE_NON_LIN		0x00
+//Macros:
+#define GET_I2T_SHIFT(x)		(x & 0x0F)
+#define GET_I2T_USE_NL(x)		((x & 0x80) >> 7)
+#define I2T_80PCT_WARNING(x)	((4*x) / 5)	//80%
 
 #endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 

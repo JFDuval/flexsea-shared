@@ -68,11 +68,6 @@ static void resetCurrentSampleIndex(void);
 
 void initI2t(void)
 {
-	//Default preset:
-	#ifdef BOARD_TYPE_FLEXSEA_REGULATE
-	presetI2t(&i2t, I2T_RE_PRESET_A);
-	#endif
-
 	//Read from non-volatile/EEPROM:
 	#ifdef BOARD_TYPE_FLEXSEA_REGULATE
 	readI2tFromEEPROM();
@@ -122,7 +117,7 @@ int i2t_compute(void)
 	//Now we need to bring that value down to 8bits-ish, and saturate it:
 	sampleAverage = sampleAverage >> i2t.shift;
 	
-	if(i2t.useNL == I2T_ENABLE_NON_LIN)
+	if(i2t.useNL)
 	{
 		//Non-linearity at high currents:
 		if(sampleAverage > i2t.nonLinThreshold)
@@ -172,22 +167,27 @@ int i2t_compute(void)
 	}
 }
 
-void updateI2tSettings(struct i2t_s newI2t)
+void updateI2tSettings(struct i2t_s newI2t, uint8_t fromEEPROM)
 {
 	//Some rough safety checks to detect crazy values
-	if((newI2t.shift < 4 || newI2t.shift > 8) || \
+	uint8_t shift = GET_I2T_SHIFT(newI2t.config);
+	if((shift < 4 || shift > 8) || \
 		(newI2t.leak >= newI2t.limit))
 	{
 		//Crazy values, we load presets instead:
-		presetI2t(&i2t, I2T_RE_PRESET_A);
-		return;
+		presetI2t(&newI2t, I2T_RE_PRESET_A);
 	}
 	
-	//Set values not shared:
-	newI2t.warning = (4*newI2t.limit) / 5;	//80%
 	//Compute from what's received:
-	newI2t.shift = (newI2t.config & 0x0F);
-	newI2t.useNL = (newI2t.config & 0x80);	
+	newI2t.shift = shift;
+	newI2t.useNL = GET_I2T_USE_NL(newI2t.config);
+	newI2t.warning = (4*newI2t.limit) / 5;	//80%
+	
+	if(!fromEEPROM)
+	{
+		//Came from the user and/or Mn, should we save in EEPROM?
+		if(diffI2tStructs(i2t, newI2t)){writeI2tToEEPROM(newI2t);}
+	}
 	
 	//Copy structure:
 	i2t = newI2t;
@@ -207,14 +207,17 @@ uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
 	struct i2t_s s;
 	if(b == I2T_RE_PRESET_A)
 	{
-		//Regulate: 7.5A cont., 15A for 150ms, non-linearity at 17.5A			
+		//Regulate: 7.5A cont., 15A for 150ms, non-linearity at 17.5A
 		s.shift = 7;
 		s.leak = 3433;
 		s.limit = 15449;
-		s.warning = (4*s.limit) / 5;	//80%
+		s.warning = I2T_80PCT_WARNING(s.limit);
 		s.nonLinThreshold = 137;
-		s.useNL = I2T_ENABLE_NON_LIN;
-		s.config = 128;
+		s.useNL = 1;
+		//Build config from user friendly values:
+		s.config = 0;
+		s.config |= (s.shift & 0x0F);
+		s.config |= ((s.useNL & 0x01) << 7);
 		
 		//Copy
 		(*i) = s;
@@ -231,6 +234,20 @@ uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
 	
 	//Failed
 	return 0;
+}
+
+uint8_t diffI2tStructs(struct i2t_s a, struct i2t_s b)
+{
+	if((a.shift == b.shift) && (a.limit == b.limit) && \
+		(a.leak == b.leak) && (a.nonLinThreshold == b.nonLinThreshold) && \
+		(a.config == b.config))
+	{
+		//No difference:
+		return 0;
+	}
+	
+	//Difference
+	return 1;
 }
 
 //****************************************************************************
