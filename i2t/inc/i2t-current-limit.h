@@ -89,11 +89,11 @@ uint8_t i2t_get_flag(void);
 #define RET_I2T_WARNING			1
 #define RET_I2T_LIMIT			2
 
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 //Macros:
 #define GET_I2T_SHIFT(x)		(x & 0x0F)
 #define GET_I2T_USE_NL(x)		((x & 0x80) >> 7)
 #define I2T_80PCT_WARNING(x)	((4*x) / 5)	//80%
-
-#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 #endif 	//INC_I2TCURRENT_H

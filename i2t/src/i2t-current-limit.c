@@ -224,12 +224,24 @@ uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
 		
 		return 1;
 	}
-	else if(b == 1)
+	if(b == I2T_RE_PRESET_B)
 	{
-		//ToDo Execute, or other pre-sets.
+		//Regulate: TBD
+		s.shift = 7;
+		s.leak = 6105;
+		s.limit = 76295;
+		s.warning = I2T_80PCT_WARNING(s.limit);
+		s.nonLinThreshold = 125;
+		s.useNL = 1;
+		//Build config from user friendly values:
+		s.config = 0;
+		s.config |= (s.shift & 0x0F);
+		s.config |= ((s.useNL & 0x01) << 7);
 		
-		//Not programmed, fail:
-		return 0;
+		//Copy
+		(*i) = s;
+		
+		return 1;
 	}
 	
 	//Failed
