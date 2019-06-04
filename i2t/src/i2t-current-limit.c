@@ -35,13 +35,13 @@
 #include <stdlib.h>
 #include "i2t-current-limit.h"
 
+#if(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+#include "eeprom_user.h"
+#endif	//(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 #if(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 #include "main.h"
 #include "i2t-squares.h"
-
-#ifdef BOARD_TYPE_FLEXSEA_REGULATE
-#include "eeprom_user.h"
-#endif	//BOARD_TYPE_FLEXSEA_REGULATE
 	
 //****************************************************************************
 // Variable(s)
@@ -52,8 +52,12 @@ uint8_t currentSampleIndex = 0;
 uint8_t currentLimitFlag = 0;
 uint8_t i2tPct = 0;
 
+#endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
 //Structure used to configure the protections:
 struct i2t_s i2t;
+
+#if (defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 //****************************************************************************
 // Private Function Prototype(s)
@@ -167,32 +171,6 @@ int i2t_compute(void)
 	}
 }
 
-void updateI2tSettings(struct i2t_s newI2t, uint8_t fromEEPROM)
-{
-	//Some rough safety checks to detect crazy values
-	uint8_t shift = GET_I2T_SHIFT(newI2t.config);
-	if((shift < 4 || shift > 8) || \
-		(newI2t.leak >= newI2t.limit))
-	{
-		//Crazy values, we load presets instead:
-		presetI2t(&newI2t, I2T_RE_PRESET_A);
-	}
-	
-	//Compute from what's received:
-	newI2t.shift = shift;
-	newI2t.useNL = GET_I2T_USE_NL(newI2t.config);
-	newI2t.warning = (4*newI2t.limit) / 5;	//80%
-	
-	if(!fromEEPROM)
-	{
-		//Came from the user and/or Mn, should we save in EEPROM?
-		if(diffI2tStructs(i2t, newI2t)){writeI2tToEEPROM(newI2t);}
-	}
-	
-	//Copy structure:
-	i2t = newI2t;
-}
-
 //Returns the %. 0% means no integral, 100% = we are at the limit.
 uint8_t i2t_get_percentage(void){return i2tPct;}
 
@@ -200,6 +178,35 @@ uint8_t i2t_get_percentage(void){return i2tPct;}
 uint8_t i2t_get_flag(void){return currentLimitFlag;}
 
 #endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+
+//From partial data this will fill all the I2t parameters.
+//It also performs checks, and it saves data to EEPROM if needed
+//If the data is invalid it loads presets.
+void updateI2tSettings(struct i2t_s newI2t, struct i2t_s *I2t, enum i2tPresets_s pre, uint8_t fromEEPROM)
+{
+	//Some rough safety checks to detect crazy values
+	uint8_t shift = GET_I2T_SHIFT(newI2t.config);
+	if((shift < 4 || shift > 8) || \
+		(newI2t.leak >= newI2t.limit))
+	{
+		//Crazy values, we load presets instead:
+		presetI2t(&newI2t, pre);
+	}
+
+	//Compute from what's received:
+	newI2t.shift = shift;
+	newI2t.useNL = GET_I2T_USE_NL(newI2t.config);
+	newI2t.warning = (4*newI2t.limit) / 5;	//80%
+
+	if(!fromEEPROM)
+	{
+		//Came from the user and/or Mn, should we save in EEPROM?
+		if(diffI2tStructs((*I2t), newI2t)){writeI2tToEEPROM(newI2t);}
+	}
+
+	//Copy structure:
+	(*I2t) = newI2t;
+}
 
 //Default limits:
 uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
