@@ -28,7 +28,7 @@ enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
 
 //Manage:
 #define MN_WBUF_SIZE				12
-#define MN_RBUF_SIZE				12
+#define MN_RBUF_SIZE				13
 #define MN_BUF_SIZE					(MN_WBUF_SIZE + MN_RBUF_SIZE)
 
 //Manage shared memory locations:
