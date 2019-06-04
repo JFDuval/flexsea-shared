@@ -198,11 +198,13 @@ void updateI2tSettings(struct i2t_s newI2t, struct i2t_s *I2t, enum i2tPresets_s
 	newI2t.useNL = GET_I2T_USE_NL(newI2t.config);
 	newI2t.warning = (4*newI2t.limit) / 5;	//80%
 
+	#if(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 	if(!fromEEPROM)
 	{
 		//Came from the user and/or Mn, should we save in EEPROM?
 		if(diffI2tStructs((*I2t), newI2t)){writeI2tToEEPROM(newI2t);}
 	}
+	#endif	//(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
 	//Copy structure:
 	(*I2t) = newI2t;
