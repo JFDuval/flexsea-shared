@@ -58,7 +58,10 @@ struct i2t_s
 	uint32_t warning;	
 };
 
+//List of presets:
 enum i2tPresets_s{I2T_RE_PRESET_A = 0, I2T_RE_PRESET_B};
+//Preset I2t value used by default:
+#define DEFAULT_RE_PRESET	I2T_RE_PRESET_A
 
 //****************************************************************************
 // Public Function Prototype(s):
@@ -89,6 +92,12 @@ uint8_t i2t_get_flag(void);
 #define RET_I2T_NORMAL			0
 #define RET_I2T_WARNING			1
 #define RET_I2T_LIMIT			2
+
+//****************************************************************************
+// Shared Variable(s):
+//****************************************************************************
+
+extern struct i2t_s i2t;
 
 #endif	//(defined BOARD_TYPE_FLEXSEA_EXECUTE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 

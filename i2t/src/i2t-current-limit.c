@@ -233,12 +233,12 @@ uint8_t presetI2t(struct i2t_s *i, enum i2tPresets_s b)
 	}
 	if(b == I2T_RE_PRESET_B)
 	{
-		//Regulate: TBD
+		//Regulate: 10A cont., 15A for 1s, non-linearity at 17.5A
 		s.shift = 7;
 		s.leak = 6105;
 		s.limit = 76295;
 		s.warning = I2T_80PCT_WARNING(s.limit);
-		s.nonLinThreshold = 125;
+		s.nonLinThreshold = 137;
 		s.useNL = 1;
 		//Build config from user friendly values:
 		s.config = 0;
