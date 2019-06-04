@@ -19,16 +19,16 @@
 // Definition(s):
 //****************************************************************************
 
-//MnRe Interface:
+//MnRe Interface (two DIOs):
 #define MNRE_DEBOUNCE				2
 #define MNRE_PULSE_LEN				15
 #define MNRE_PULSE_WIGGLE			2
 
 enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
 
-//Manage:
-#define MN_WBUF_SIZE				12
-#define MN_RBUF_SIZE				13
+//I2C buffers:
+#define MN_WBUF_SIZE				12	//Re writes to Mn
+#define MN_RBUF_SIZE				13	//Re reads from Mn
 #define MN_BUF_SIZE					(MN_WBUF_SIZE + MN_RBUF_SIZE)
 
 //Manage shared memory locations:
@@ -45,11 +45,7 @@ enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
 #define MN_W_CURRENT_LSB			9
 #define MN_W_TEMP					10
 #define MN_W_STATUS					11
-//(Re reads from Manage) //ToDo
-#define MN_R_B0						0
-#define MN_R_B1						1
-#define MN_R_B2						2
-#define MN_R_B3						3
+//(Re reads from Manage buffer: not defined)
 
 #define I2C_READ_KEY				0x55
 #define I2T_ENABLE_NON_LIN			0x80
