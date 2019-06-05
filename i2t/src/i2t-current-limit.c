@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "i2t-current-limit.h"
 
-#if(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+#if(defined BOARD_SUBTYPE_RIGID || defined BOARD_TYPE_FLEXSEA_REGULATE)
 #include "eeprom_user.h"
 #endif	//(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
 
@@ -198,7 +198,7 @@ void updateI2tSettings(struct i2t_s newI2t, struct i2t_s *I2t, enum i2tPresets_s
 	newI2t.useNL = GET_I2T_USE_NL(newI2t.config);
 	newI2t.warning = (4*newI2t.limit) / 5;	//80%
 
-	#if(defined BOARD_TYPE_FLEXSEA_MANAGE || defined BOARD_TYPE_FLEXSEA_REGULATE)
+	#if(defined BOARD_SUBTYPE_RIGID || defined BOARD_TYPE_FLEXSEA_REGULATE)
 	if(!fromEEPROM)
 	{
 		//Came from the user and/or Mn, should we save in EEPROM?
