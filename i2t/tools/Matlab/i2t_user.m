@@ -29,12 +29,12 @@ SCALE = 128;              % (Octave only, avoids bitwise operations)
 NON_LIN_TRESH = 17500;    % mA
 
 % Maximum average current you want to support:
-maxAvgCurrent = 7500;     %mA
+maxAvgCurrent = 10000;     %mA
 I2T_LEAK = (maxAvgCurrent / SCALE)^2
 
 % Maximum peak current you want to support, and duration:
-currentLimit = 15000;     %mA
-currentLimitTime = 0.15;     %s
+currentLimit = 15000;       %mA
+currentLimitTime = 1;     %s
 I2T_LIMIT = (currentLimitTime / dt) * ((currentLimit/SCALE)^2 - I2T_LEAK)
 
 %At what fraction of the max to you want a warning? (0-1)

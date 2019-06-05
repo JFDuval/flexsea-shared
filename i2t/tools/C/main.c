@@ -8,10 +8,10 @@ uint8_t userShift = 7;
 //Maximum average current you want to support:
 int32_t userMaxAvgCurrent = 5000;			//mA
 //Maximum peak current you want to support, and duration:
-int32_t userCurrentLimit = 17500;			//mA
+int32_t userCurrentLimit = 12500;			//mA
 float userCurrentLimitTime = 1;				//s
 //Non-linear threshold
-int32_t userNlTresh = 22500;
+int32_t userNlTresh = 17500;
 
 //Values that will get programmed:
 uint8_t I2T_SHIFT = 0;
@@ -28,10 +28,10 @@ float warn = 0.8;
 //Input variable limits:
 #define LIM_L_SHIFT				5
 #define LIM_H_SHIFT				7
-#define LIM_L_AVG_CURRENT		1000
+#define LIM_L_AVG_CURRENT		500
 #define LIM_H_AVG_CURRENT		30000
 #define LIM_L_CURRENT			1000
-#define LIM_H_CURRENT			30000
+#define LIM_H_CURRENT			40000
 #define LIM_L_NL_CURRENT		1000
 #define LIM_H_NL_CURRENT		30000
 #define LIM_L_CURR_LIM_TIME		0.01
