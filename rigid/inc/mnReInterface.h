@@ -28,7 +28,7 @@ enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
 
 //I2C buffers:
 #define MN_WBUF_SIZE				12	//Re writes to Mn
-#define MN_RBUF_SIZE				13	//Re reads from Mn
+#define MN_RBUF_SIZE				14	//Re reads from Mn (config)
 #define MN_BUF_SIZE					(MN_WBUF_SIZE + MN_RBUF_SIZE)
 
 //Manage shared memory locations:
