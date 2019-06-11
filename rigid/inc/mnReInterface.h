@@ -24,7 +24,7 @@
 #define MNRE_PULSE_LEN				15
 #define MNRE_PULSE_WIGGLE			2
 
-enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG};
+enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG, SESSION};
 
 //I2C buffers:
 #define MN_WBUF_SIZE				12	//Re writes to Mn
