@@ -31,6 +31,10 @@ enum MN_RE_MSG{MN_BOOTED = 0, NEW_CONFIG, GET_SESSION};
 #define MN_RBUF_SIZE				14	//Re reads from Mn (config)
 #define MN_BUF_SIZE					(MN_WBUF_SIZE + MN_RBUF_SIZE)
 
+//Payload type:
+#define MNRE_REGULAR_UPDATE			0x33
+#define MNRE_SESSION_STATS			0xAA	//Starting address
+
 //Manage shared memory locations:
 //(Re writes to Manage)
 #define MN_W_CONTROL1				0
