@@ -39,8 +39,8 @@ void log_log(TLogLevel level, const char *file, int line, const char *fmt, ...);
 #else
 
 #include "print.h"
-// TODO: only implemented on BMS and haboslute at the moment
-#define LOG(level,...)		print(level, __VA_ARGS__)
+// TODO: disabling on manage for now we were getting hard faults from too many messages
+#define LOG(level,...)		do{}while(0); //print(level, __VA_ARGS__)
 
 #endif
 
